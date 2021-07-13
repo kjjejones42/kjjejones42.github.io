@@ -221,7 +221,7 @@
               for (let k in queryParams) {
                 if (queryParams[k] == this.DEFAULT_ARGS[k]) {delete queryParams[k];}
               }
-              history.pushState({}, "", window.location.protocol + "//" + window.location.pathname + "?" + new URLSearchParams(queryParams).toString())
+              history.pushState({}, "", window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + new URLSearchParams(queryParams).toString())
           });
         });
         return false;
