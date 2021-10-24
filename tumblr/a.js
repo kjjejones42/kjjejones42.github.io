@@ -29,7 +29,7 @@ const token = {
 $.ajax({
   url: request_data.url,
   type: request_data.method,
-  data: oauth.authorize(request_data, token),
+  headers: oauth.toHeader(oauth.authorize(request_data, token)),
 }).done(function(data) {
   console.log(data)
 })
