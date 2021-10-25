@@ -12,6 +12,8 @@ const oauth = OAuth({
   nonce_length: 6,
   signature_method: 'HMAC-SHA1',
   hash_function(base_string, key) {
+    console.log(base_string)
+    console.log(key)
       return CryptoJS.HmacSHA1(base_string, key).toString(CryptoJS.enc.Base64)
   },
 })
