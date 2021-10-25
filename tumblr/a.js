@@ -12,8 +12,6 @@ const oauth = OAuth({
   nonce_length: 6,
   signature_method: 'HMAC-SHA1',
   hash_function(base_string, key) {
-    console.log(base_string)
-    console.log(key)
       return CryptoJS.HmacSHA1(base_string, key).toString(CryptoJS.enc.Base64)
   },
 })
@@ -33,10 +31,15 @@ headers = oauth.toHeader(oauth.authorize(request_data, token));
 headers['content-type'] = 'application/x-www-form-urlencoded'
 
 
+req = new Request(request_data.url, {method: request_data.method, headers:headers})
+fetch(req).then(x => console.log(x))
+
 const xhttp = new XMLHttpRequest();
 xhttp.onload = () => console.log(xhttp);
 xhttp.open(request_data.method, request_data.url, true);
-xhttp.headers = headers
+for (let header in headers) {
+  xhttp.setRequestHeader(header, headers[header])
+}
 xhttp.send();
 
 // $.ajax({
