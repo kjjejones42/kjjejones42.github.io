@@ -26,6 +26,8 @@ const token = {
   secret: '5aBkfEjONhBqJA18S4AWZ7IgmfIHiobyYFcOsG5uKUiKULnnn9',
 }
 
+console.log( oauth.toHeader(oauth.authorize(request_data, token)))
+
 $.ajax({
   url: request_data.url,
   type: request_data.method,
