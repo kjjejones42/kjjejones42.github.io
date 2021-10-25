@@ -29,9 +29,7 @@ const token = {
 
 headers = oauth.toHeader(oauth.authorize(request_data, token));
 
-req = new Request(request_data.url, {method: request_data.method, headers:headers})
-fetch(req).then(x => {
-  let a = await x.json()
-  console.log(a)
-  console.log(x)
-})
+function get() {
+  req = new Request(request_data.url, {method: request_data.method, headers:headers})
+  return fetch(req)
+}
