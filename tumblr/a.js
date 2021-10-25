@@ -1,35 +1,33 @@
-const CLIENT_KEY = "fm5PiZD634sPqZ2KgM8EDkgH3tkCcD2jDx9QN0N1MFDJXjFJaz"
-const CLIENT_SECRET = 'ofCbtitgLZySDCfCtLaiBmNggXSphqKmLa9LMbDNXEPPJvfAEz'
-const REQUEST_TOKEN_URL = 'https://www.tumblr.com/oauth/request_TOKEN'
+const REQUEST_TOKEN_URL = 'https://www.tumblr.com/oauth/request_token'
 const AUTHORIZATION_BASE_URL = 'https://www.tumblr.com/oauth/authorize'
-const ACCESS_TOKEN_URL = 'https://www.tumblr.com/oauth/access_TOKEN'
+const ACCESS_TOKEN_URL = 'https://www.tumblr.com/oauth/access_token'
 
-const oauth = OAuth({
-  consumer: {
-      key: CLIENT_KEY,
-      secret: CLIENT_SECRET,
-  },
-  // nonce_length: 6,
-  signature_method: 'HMAC-SHA1',
-  hash_function(base_string, key) {
-      return CryptoJS.HmacSHA1(base_string, key).toString(CryptoJS.enc.Base64)
-  },
-})
-
-const request_data = {
-  url: 'https://api.tumblr.com/v2/user/dashboard',
-  method: 'GET'
+const CONSUMER = {
+  key: 'fm5PiZD634sPqZ2KgM8EDkgH3tkCcD2jDx9QN0N1MFDJXjFJaz',
+  secret: 'ofCbtitgLZySDCfCtLaiBmNggXSphqKmLa9LMbDNXEPPJvfAEz',
 }
-
-// Note: The token is optional for some requests
-const token = {
+const TOKEN = {
   key: 'G0kTxkEX5BY7nVJ7AGt8myQqH2tof0y7vfg1HCwxpQfE2GS0zn',
   secret: '5aBkfEjONhBqJA18S4AWZ7IgmfIHiobyYFcOsG5uKUiKULnnn9',
 }
 
-headers = oauth.toHeader(oauth.authorize(request_data, token));
+const oauth = OAuth({
+  consumer: CONSUMER,
+  nonce_length: 6,
+  signature_method: 'HMAC-SHA1',
+  hash_function: (base, key)  => CryptoJS.HmacSHA1(base, key).toString(CryptoJS.enc.Base64),
+})
 
-function get() {
-  req = new Request(request_data.url, {method: request_data.method, headers:headers})
-  return fetch(req)
+async function get_dashboard() {
+  const request_data = {
+    url: 'https://api.tumblr.com/v2/user/dashboard',
+    method: 'GET'
+  }
+  let result = () => new Promise(resolve => {
+      headers = oauth.toHeader(oauth.authorize(request_data, TOKEN));
+      req = new Request(request_data.url, {method: request_data.method, headers:headers})
+      fetch(req).then(x => x.json().then(y => resolve(y)))
+    })
+  return result()
 }
+
