@@ -20,7 +20,7 @@ const oauth = OAuth({
 
 const request_data = {
   url: 'https://api.tumblr.com/v2/user/dashboard',
-  method: 'get'
+  method: 'GET'
 }
 
 // Note: The token is optional for some requests
@@ -33,10 +33,16 @@ headers = oauth.toHeader(oauth.authorize(request_data, token));
 headers['content-type'] = 'application/x-www-form-urlencoded'
 
 
-$.ajax({
-  url: request_data.url,
-  type: request_data.method,
-  headers: headers,
-}).done(function(data) {
-  console.log(data)
-})
+const xhttp = new XMLHttpRequest();
+xhttp.onload = () => console.log(xhttp);
+xhttp.open(request_data.method, request_data.url, true);
+xhttp.headers = headers
+xhttp.send();
+
+// $.ajax({
+//   url: request_data.url,
+//   type: request_data.method,
+//   headers: headers,
+// }).done(function(data) {
+//   console.log(data)
+// })
