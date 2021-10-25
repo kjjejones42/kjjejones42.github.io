@@ -26,12 +26,14 @@ const token = {
   secret: '5aBkfEjONhBqJA18S4AWZ7IgmfIHiobyYFcOsG5uKUiKULnnn9',
 }
 
-console.log( oauth.toHeader(oauth.authorize(request_data, token)))
+headers = oauth.toHeader(oauth.authorize(request_data, token));
+headers['content-type'] = 'application/x-www-form-urlencoded'
+
 
 $.ajax({
   url: request_data.url,
   type: request_data.method,
-  headers: oauth.toHeader(oauth.authorize(request_data, token)),
+  headers: headers,
 }).done(function(data) {
   console.log(data)
 })
