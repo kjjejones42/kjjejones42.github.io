@@ -10,22 +10,26 @@
 
   const TOKEN = get_token();
 
-  const oauth = OAuth({
+  const OAUTH = OAuth({
     consumer: CONSUMER,
     signature_method: 'HMAC-SHA1',
     hash_function: (base, key)  => CryptoJS.HmacSHA1(base, key).toString(CryptoJS.enc.Base64),
   })
+
+  function make_request(request_data) {
+    return new Promise((resolve, reject) => {
+      headers = OAUTH.toHeader(OAUTH.authorize(request_data, TOKEN));
+      req = new Request(request_data.url, {method: request_data.method, headers:headers})
+      fetch(req).then(x => x.json().then(y => resolve(y))).catch(y => reject(y))
+    })
+  }
 
   function get_dashboard() {
     const request_data = {
       url: 'https://api.tumblr.com/v2/user/dashboard',
       method: 'GET'
     }
-    return new Promise((resolve, reject) => {
-        headers = oauth.toHeader(oauth.authorize(request_data, TOKEN));
-        req = new Request(request_data.url, {method: request_data.method, headers:headers})
-        fetch(req).then(x => x.json().then(y => resolve(y))).catch(y => reject(y))
-      })
+    return make_request(request_data)
   }
 
   function url_params_from_callback() {
@@ -41,15 +45,13 @@
     if (document.cookie == '') {
       return null
     }
-    let cookie = document.cookie.split(';').map(x => x.split('=')).filter(x => x.length == 2)
-    let dict = {}
-    for (let line of cookie) {
-      dict[line[0]] = line[1]
+    const dict = document.cookie.split('; ').map(x => x.split('=')).filter(x => x.length == 2)
+      .reduce((x,y) => {x[y[0]] = y[1]; return x}, {})
+    let token = {}
+    for (let i of ['key', 'secret']) {
+      if (dict[i]) { token[i] = dict[i]}
     }
-    return {
-      key: dict['key'],
-      secret: dict['secret']
-    }
+    return token
   }
 
   function set_cookie(key, value) {    
@@ -81,6 +83,6 @@
   }
 
   get_dashboard().then(x => console.log(x))
-  set_cookie("key", "abc")
-  set_cookie("token", "123")
+  set_cookie('key', 'abc')
+  set_cookie('token', '123')
 })()
