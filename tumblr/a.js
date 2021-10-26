@@ -7,14 +7,11 @@
     key: 'fm5PiZD634sPqZ2KgM8EDkgH3tkCcD2jDx9QN0N1MFDJXjFJaz',
     secret: 'ofCbtitgLZySDCfCtLaiBmNggXSphqKmLa9LMbDNXEPPJvfAEz'
   }
-  const TOKEN = {
-    key: 'G0kTxkEX5BY7nVJ7AGt8myQqH2tof0y7vfg1HCwxpQfE2GS0zn',
-    secret: '5aBkfEjONhBqJA18S4AWZ7IgmfIHiobyYFcOsG5uKUiKULnnn9'
-  }
+
+  const TOKEN = get_token();
 
   const oauth = OAuth({
     consumer: CONSUMER,
-    // nonce_length: 6,
     signature_method: 'HMAC-SHA1',
     hash_function: (base, key)  => CryptoJS.HmacSHA1(base, key).toString(CryptoJS.enc.Base64),
   })
@@ -40,8 +37,25 @@
     return false
   }
 
-  function set_cookie() {
+  function get_token() {
+    if (document.cookie == '') {
+      return null
+    }
+    let cookie = document.cookie.split(';').map(x => x.split('=')).filter(x => x.length == 2)
+    let dict = {}
+    for (let line of cookie) {
+      dict[line[0]] = line[1]
+    }
+    return {
+      key: dict['key'],
+      secret: dict['secret']
+    }
+  }
 
+  function set_cookie(key, value) {    
+    let date = new Date();
+    date.setTime(date.getTime() + (10 * 365 * 24 * 60 * 60 * 1000));
+    document.cookie = `${key}=${value}; expires=${date.toUTCString()}; path=/`
   }
 
   function process_token() {
@@ -56,7 +70,7 @@
 
   }
 
-  if (document.cookie == '') {    
+  if (!TOKEN) {    
     if (url_params_from_callback()) {
       process_token()
     } else {
@@ -67,4 +81,6 @@
   }
 
   get_dashboard().then(x => console.log(x))
+  set_cookie("key", "abc")
+  set_cookie("token", "123")
 })()
