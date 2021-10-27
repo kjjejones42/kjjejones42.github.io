@@ -75,11 +75,29 @@ oauth_token_secret  String  The user's access token secret
     secret: 'ofCbtitgLZySDCfCtLaiBmNggXSphqKmLa9LMbDNXEPPJvfAEz'
   }
 
-  const TOKEN = get_token();
+  const TOKEN = {
+    key: '957MpB8WxP6vQzy2b3kYAK48qUVtSdAQxDVHJSEKUMna2BR26n',
+    secret: 'e2qp86KjQP7eOXncKtEkcqjDPYLhqi4AnOBn3uUhsQT94HXsmI'
+  }
+
+  function get_token() {
+    if (document.cookie == '') {
+      return null
+    }
+    const dict = document.cookie.split('; ').map(x => x.split('=')).filter(x => x.length == 2)
+      .reduce((x,y) => {x[y[0]] = y[1]; return x}, {})
+    let token = {}
+    for (let i of ['key', 'secret']) {
+      if (dict[i]) { token[i] = dict[i]}
+    }
+    return token
+  }
+
 
   const OAUTH = OAuth({
     consumer: CONSUMER,
     signature_method: 'HMAC-SHA1',
+    nonce_length:6,
     hash_function: (base, key)  => CryptoJS.HmacSHA1(base, key).toString(CryptoJS.enc.Base64),
   })
 
@@ -108,19 +126,6 @@ oauth_token_secret  String  The user's access token secret
     return false
   }
 
-  function get_token() {
-    if (document.cookie == '') {
-      return null
-    }
-    const dict = document.cookie.split('; ').map(x => x.split('=')).filter(x => x.length == 2)
-      .reduce((x,y) => {x[y[0]] = y[1]; return x}, {})
-    let token = {}
-    for (let i of ['key', 'secret']) {
-      if (dict[i]) { token[i] = dict[i]}
-    }
-    return token
-  }
-
   function set_cookie(key, value) {    
     let date = new Date();
     date.setTime(date.getTime() + (10 * 365 * 24 * 60 * 60 * 1000));
@@ -137,12 +142,11 @@ oauth_token_secret  String  The user's access token secret
       url: REQUEST_TOKEN_URL, 
       method: 'POST'
     }
-    headers = OAUTH.toHeader(OAUTH.authorize(request_data, CONSUMER));
-    headers['Access-Control-Allow-Origin'] = '*'
-    console.log(headers)
-    req = new Request(request_data.url, {method: request_data.method, headers:headers})
-    console.log(req)
-    fetch(req).then(x => x.json().then(y => resolve(y))).catch(y => reject(y))
+    const au = OAUTH.authorize(request_data)
+    console.log(au)
+    headers = new Headers(OAUTH.toHeader(au));
+    fetch(request_data.url, {method: request_data.method, headers:headers, credentials:'omit', referrerPolicy:'no-referrer'})
+    .then(x => x.json().then(y => resolve(y))).catch(y => reject())
   })
   }
 
@@ -159,5 +163,6 @@ oauth_token_secret  String  The user's access token secret
   } else {
     init()
   }
+  get_dashboard().then(x => console.log(x)).catch(x => console.log(x))
   get_request_token().then(x => console.log(x)).catch(x => console.log(x))
 // })()
