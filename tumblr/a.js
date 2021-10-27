@@ -65,7 +65,7 @@ oauth_token_secret  String  The user's access token secret
 
 */
 
-(function(){
+// (function(){
   const REQUEST_TOKEN_URL = 'https://www.tumblr.com/oauth/request_token'
   const AUTHORIZATION_BASE_URL = 'https://www.tumblr.com/oauth/authorize'
   const ACCESS_TOKEN_URL = 'https://www.tumblr.com/oauth/access_token'
@@ -131,8 +131,19 @@ oauth_token_secret  String  The user's access token secret
 
   }
 
-  function get_token() {
-
+  function get_request_token() {    
+    return new Promise((resolve, reject) => {
+    const request_data = {
+      url: REQUEST_TOKEN_URL, 
+      method: 'POST'
+    }
+    headers = OAUTH.toHeader(OAUTH.authorize(request_data, CONSUMER));
+    headers['Access-Control-Allow-Origin'] = '*'
+    console.log(headers)
+    req = new Request(request_data.url, {method: request_data.method, headers:headers})
+    console.log(req)
+    fetch(req).then(x => x.json().then(y => resolve(y))).catch(y => reject(y))
+  })
   }
 
   function init() {
@@ -148,6 +159,5 @@ oauth_token_secret  String  The user's access token secret
   } else {
     init()
   }
-
-  get_dashboard().then(x => console.log(x))
-})()
+  get_request_token().then(x => console.log(x)).catch(x => console.log(x))
+// })()
