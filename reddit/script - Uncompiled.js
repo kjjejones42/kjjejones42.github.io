@@ -128,11 +128,13 @@
     );
 
 
-    render() {
+    render() {      
+      const darkModeClass = this.props.isDark ? 'table-dark' : 'table-light'
+      const className = `table table-bordered table-striped table-hover table-sm table-responsive ${darkModeClass} mb-0`
       return (
-  <div>
-        <table id="table" className="table table-bordered table-striped table-hover table-sm table-responsive table-light mb-0">
-          <thead className="thead-light">
+      <div>
+        <table id="table" className={className}>
+          <thead>
             <tr>
               <th>Score</th>
               <th>Comments</th>
@@ -172,6 +174,7 @@
         is_loading: false,
         show_sub: true,
         newTab: true,
+        isDark: window.matchMedia("(prefers-color-scheme: dark)").matches
       }
 
     constructor(props) {
@@ -181,11 +184,14 @@
     }
 
     componentDidMount() {
-        window.addEventListener('load', () => {
-          if (window.location.search.replace("?","").length > 0) {
-            this.submit()
-          }
-        });
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener('change', e => {
+        this.setState({isDark: e.matches})
+      })
+      window.addEventListener('load', () => {
+        if (window.location.search.replace("?","").length > 0) {
+          this.submit()
+        }
+      });
     }
 
     getData = (origArgs, onComplete) => {
@@ -204,26 +210,32 @@
       this.setState({ [event.target.name]: value });
     };
 
+    updateUrl = queryParams => {      
+      const params = {...queryParams}
+      for (let value of ["month","year"]) {params[value] = this.state[value]}
+      for (let value of ["before","after"]) {delete params[value]}
+        for (let k in params) {
+          if (params[k] == this.DEFAULT_ARGS[k]) {delete params[k];}
+        }
+        const url = new URL(window.location)
+        url.search = new URLSearchParams(params).toString()
+        history.pushState({}, "", url.toString())
+    }
+
     submit = e => {
       if (e) {
         e.preventDefault();
         e.stopPropagation();
       }  
-
       const newState = {is_loading: true, show_sub: this.state.subreddit.trim() == ""};
       const before_after = get_before_after(this.state.month, this.state.year)      
       this.setState(newState, () => {
         let queryParams = {}
         for (let value of ["before","after"]) {queryParams[value] = before_after[value]}
         for (let value of this.QUERY_PARAMS) {queryParams[value] = this.state[value]}
+        this.updateUrl(queryParams)
         this.getData(queryParams, data => {
           this.setState({ data: data, is_loading: false }) 
-          for (let value of ["month","year"]) {queryParams[value] = this.state[value]}
-          for (let value of ["before","after"]) {delete queryParams[value]}
-            for (let k in queryParams) {
-              if (queryParams[k] == this.DEFAULT_ARGS[k]) {delete queryParams[k];}
-            }
-            history.pushState({}, "", window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + new URLSearchParams(queryParams).toString())
         });
       });
       return false;
@@ -233,7 +245,7 @@
       return (
         <div className="container-md">
           <Chooser changeFunc={this.choose} submitFunc={this.submit} {...this.state} />
-          <Table data={this.state.data} is_loading={this.state.is_loading} show_sub={this.state.show_sub} newTab={this.state.newTab} />
+          <Table data={this.state.data} is_loading={this.state.is_loading} show_sub={this.state.show_sub} newTab={this.state.newTab} isDark={this.state.isDark} />
         </div>
       );
     };

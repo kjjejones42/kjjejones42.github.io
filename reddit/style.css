@@ -1,9 +1,37 @@
-body {
-    background-color: dimgray;
+@media(prefers-color-scheme:light) {
+	body {
+		background-color: dimgrey
+	}
+	.container-md {
+		background-color: white
+	}
+    a:visited {
+        color: purple
+    }
+    
+}
+
+@media(prefers-color-scheme:dark) {
+	body {
+		color: #ddd;
+		background-color: black
+	}
+	.container-md, .modal-content {
+		background-color: #111;
+	}
+    a {
+        color: #acf;
+    }
+    a:visited {
+        color: #a8a
+    }
+}
+
+html, body, #root, .container-md {
+    height: 100%;
 }
 
 .container-md {
-    background-color: white;
     padding-top: 0.75rem;
     padding-bottom: 0.75rem
 }
@@ -18,10 +46,6 @@ div a {
     width: 100%;
     height: 100%;
     display: block
-}
-
-a:visited {
-    color: purple
 }
 
 tbody td {
