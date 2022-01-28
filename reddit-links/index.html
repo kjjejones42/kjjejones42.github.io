@@ -1,20 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <title>Reddit Links</title>
-      <link rel="stylesheet" href="../bootstrap.css" crossorigin="anonymous">
-      <style>@media(prefers-color-scheme:light){body{background-color:dimgrey}.container{background-color:white}}@media(prefers-color-scheme:dark){body{color:#ddd;background-color:black}.container{background-color:#222}a{color: #acf;}}html{height:100%}body{width:100%;height:100%;overflow-wrap:anywhere}.container{min-height:100%}
-	  </style>
-   </head>
-   <body>
-      <div class="container">
-         <div class="p-3">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reddit Links</title>
+    <link rel="stylesheet" href="../bootstrap.css" crossorigin="anonymous">
+    <style>
+        @media(prefers-color-scheme:light) {
+            body {
+                background-color: dimgrey
+            }
+
+            .container {
+                background-color: white
+            }
+        }
+
+        @media(prefers-color-scheme:dark) {
+            body {
+                color: #ddd;
+                background-color: black
+            }
+
+            .container {
+                background-color: #222
+            }
+
+            a {
+                color: #acf;
+            }
+        }
+
+        html, body {
+	    margin: 10px;
+            height: 100%
+        }
+
+        body {
+            width: 100%;
+            overflow-wrap: anywhere
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+	    
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="p-3">
             <h4 class="py-3">Reddit Links</h4>
             <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=thread+OR+live+-%22live+stream%22&include_over_18=on&sort=comments&t=day">thread OR live -live-stream</a></p>
-            <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=nsfw%3Ano+-live+-thread+-subreddit%3Apolitics+-subreddit%3Aaskreddit+self%3Ayes&restrict_sr=&include_over_18=on&sort=comments&t=day">nsfw:no  self:yes -live -thread -subreddit:politics -subreddit:askreddit</a></p>
-            <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=nsfw%3Ano+-live+-thread+self%3Ano+-subreddit%3Apolitics&restrict_sr=&include_over_18=on&sort=comments&t=day">nsfw:no self:no -live -thread  -subreddit:politics</a></p>
+            <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=nsfw%3Ano+-live+-thread+-subreddit%3Apolitics+-subreddit%3Aaskreddit+self%3Ayes&restrict_sr=&include_over_18=on&sort=comments&t=day">nsfw:no self:yes -live -thread -subreddit:politics -subreddit:askreddit</a></p>
+            <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=nsfw%3Ano+-live+-thread+self%3Ano+-subreddit%3Apolitics&restrict_sr=&include_over_18=on&sort=comments&t=day">nsfw:no self:no -live -thread -subreddit:politics</a></p>
             <p><a target="_blank" href="https://www.reddit.com/user/kjjejones42/m/popular/search?q=nsfw%3Ano&restrict_sr=on&include_over_18=on&sort=comments&t=day">kjjejones42/m/popular nsfw:no</a></p>
             <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=nsfw%3Ayes&include_over_18=on&sort=comments&t=day">nsfw:yes</a></p>
             <p><a target="_blank" href="https://www.reddit.com/r/all/search?q=gay&restrict_sr=&include_over_18=on&sort=comments&t=day">gay</a></p>
@@ -22,7 +65,8 @@
             <p><a target="_blank" href="https://www.reddit.com/r/TwoBestFriendsPlay/search?q=nsfw%3Ano&restrict_sr=on&include_over_18=on&sort=comments&t=day">r/TwoBestFriendsPlay nsfw:no</a></p>
             <p><a target="_blank" href="https://www.reddit.com/r/AmItheAsshole/search?q=self%3Ayes&restrict_sr=on&include_over_18=on&sort=comments&t=day">r/AmItheAsshole self:yes</a></p>
             <p><a target="_blank" href="https://www.reddit.com/r/relationship_advice+relationships/search?q=nsfw%3Ano&restrict_sr=on&include_over_18=on&sort=comments&t=day">r/relationship_advice+relationships nsfw:no</a></p>
-         </div>
-      </div>
-   </body>
+        </div>
+    </div>
+</body>
+
 </html>
