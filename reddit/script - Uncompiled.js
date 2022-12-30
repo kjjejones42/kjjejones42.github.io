@@ -200,6 +200,7 @@
       const argObj = Object.assign({}, this.DEFAULT_API_ARGS, args);
       let qString = Object.entries(argObj).map(e => e[0] + "=" + e[1]).join("&");
       const xhttp = new XMLHttpRequest();
+      xhttp.onerror = e => (console.error(e), alert(e));
       xhttp.onload = () => onComplete(JSON.parse(xhttp.responseText).data);
       xhttp.open("GET", this.ROOT + qString, true);
       xhttp.send();
