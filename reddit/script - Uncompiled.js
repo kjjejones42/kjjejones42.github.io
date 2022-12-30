@@ -60,13 +60,13 @@
                   <div class="form-group row mb-3">
                     <label for="size" class="col-md-4">Size</label>
                     <div class="col-md-8">
-                      <input class="form-control" id="size" name="size" id="size" type="number" min="1" max="500" autocomplete="off" value={this.props.size} onChange={this.props.changeFunc} />
+                      <input class="form-control" id="size" name="size" type="number" min="1" max="500" autocomplete="off" value={this.props.size} onChange={this.props.changeFunc} />
                     </div>
                   </div>
                   <div class="form-group row mb-3">
-                    <label for="sort_type" class="col-md-4">Sort</label>
+                    <label for="sort" class="col-md-4">Sort</label>
                     <div class="col-md-8">
-                      <select class="form-control" id="sort_type" name="sort_type" value={this.props.sort_type} onChange={this.props.changeFunc} >
+                      <select class="form-control" id="sort" name="sort" value={this.props.sort} onChange={this.props.changeFunc} >
                         <option value="num_comments">Comments</option>
                         <option value="score">Score</option>
                         <option value="created_utc">Date</option>
@@ -158,9 +158,9 @@
 
   class App extends React.Component {
     ROOT = "https://api.pushshift.io/reddit/submission/search?";
-    QUERY_PARAMS = ["q", "subreddit", "size", "sort_type"]
+    QUERY_PARAMS = ["q", "subreddit", "size", "sort"]
     DEFAULT_API_ARGS = {
-      sort: "desc",
+      order: "desc",
       fields: "score,num_comments,title,full_link,subreddit",
     };
     DEFAULT_ARGS = {
@@ -169,7 +169,7 @@
         year: `${new Date().getFullYear()}`,
         month: "",
         size: "100",
-        sort_type: "num_comments",
+        sort: "num_comments",
         data: [],
         is_loading: false,
         show_sub: true,
