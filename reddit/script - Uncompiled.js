@@ -204,9 +204,10 @@
         if (xhttp.status == 200) {
           onComplete(JSON.parse(xhttp.responseText).data);          
         } else {
-          this.setState({is_loading:false});
-          console.log(xhttp);   
-          alert(xhttp.responseText);       
+          this.setState({is_loading:false}, () => {
+            console.log(xhttp);   
+            alert(xhttp.responseText);
+          });
         }
       }
       xhttp.open("GET", this.ROOT + qString, true);
