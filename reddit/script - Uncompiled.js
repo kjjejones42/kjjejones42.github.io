@@ -200,16 +200,20 @@
       const argObj = Object.assign({}, this.DEFAULT_API_ARGS, args);
       let qString = Object.entries(argObj).map(e => e[0] + "=" + e[1]).join("&");
       const xhttp = new XMLHttpRequest();
-      xhttp.onload = () => {
-        if (xhttp.status == 200) {
-          onComplete(JSON.parse(xhttp.responseText).data);          
-        } else {
+      const onerror = () => 
           this.setState({is_loading:false}, () => {
             console.log(xhttp);   
             alert(xhttp.responseText);
           });
+      xhttp.onload = () => {
+        if (xhttp.status == 200) {
+          onComplete(JSON.parse(xhttp.responseText).data);          
+        } else {
+          onerror();
         }
       }
+      xhttp.onerror = onerror;
+      xhttp.onabort = onerror;
       xhttp.open("GET", this.ROOT + qString, true);
       xhttp.send();
     };
